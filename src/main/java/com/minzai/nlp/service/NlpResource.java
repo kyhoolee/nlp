@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.minzai.nlp.api.DateParser;
+import com.minzai.nlp.api.DictParser;
 import com.minzai.nlp.model.NlpDate;
 import com.minzai.nlp.utils.LoggerUtil;
 
@@ -31,10 +32,21 @@ public class NlpResource {
 	@Path("date")
 	@GET
 	@Produces("text/plain;charset=utf-8")
-	public Response getCityLottery(@QueryParam("source") String source) {
+	public Response getDate(@QueryParam("source") String source) {
 
 
 		List<NlpDate> result = DateParser.parseDate(source);
+		return Response.ok(result).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS").build();
+	}
+	
+	@Path("dict/{type}/{word}")
+	@GET
+	@Produces("text/html;charset=utf-8")
+	public Response getWord(@PathParam("type") String type, @PathParam("word") String word) {
+
+
+		String result = DictParser.parseWord(type, word);
 		return Response.ok(result).header("Access-Control-Allow-Origin", "*")
 				.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS").build();
 	}
