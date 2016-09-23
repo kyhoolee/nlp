@@ -30,7 +30,7 @@ public class DictParser {
 				for(Element a : as) {
 					String href = a.attr("href");
 					//System.out.println(href);
-					if(href.contains("dict")) {
+					if(href.contains("dict") && !href.contains("index.php")) {
 						a.attr("href", I_SOURCE + href);
 					} else {
 						a.removeAttr("href");
@@ -41,6 +41,15 @@ public class DictParser {
 			}
 			if(content.html().length() > 0) {
 				result = head + "\n" + content.html();
+				try {
+					Elements elem = content.select("div.noarticletext");
+					if(elem.size() > 0) {
+						elem.remove();
+						result =  head + "Sory, No exact match found for '" + word + "'";
+					}
+				} catch (Exception ex) {
+					
+				}
 			} else {
 				result =  head + "Sory, No exact match found for '" + word + "'";
 			}
@@ -53,7 +62,7 @@ public class DictParser {
 	}
 	
 	public static void main(String[] args) {
-		DictParser.parseWord("en_vi", "hello");
+		System.out.println(DictParser.parseWord("en_vi", "hello"));
 	}
 
 }
